@@ -39,15 +39,14 @@ plt.legend(loc='best')
 sns.despine()
 
 Tem = np.linspace(10+273,20+273,100)
+a = (k(20+273)-k(10+273))/(20-10)
+b = k(20+273)-a*(20+273)
 fig2 = plt.figure()
 ax = fig2.add_subplot(111)
 ax.plot(Tem,k(Tem),label="$k(T)$")
+ax.plot(Tem,a*Tem+b,label="$k_{appro}(T)$")
 ax.set_xlabel('Temperature(K)')
 ax.set_ylabel('$k(T)$')
 plt.legend(loc='best')
 
 plt.show()
-
-
-
-
