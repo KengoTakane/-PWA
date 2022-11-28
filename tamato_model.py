@@ -38,6 +38,7 @@ ax.set_title('Quest')
 plt.legend(loc='best')
 sns.despine()
 
+
 Tem = np.linspace(10+273,20+273,100)
 a = (k(20+273)-k(10+273))/(20-10)
 b = k(20+273)-a*(20+273)
@@ -48,5 +49,17 @@ ax.plot(Tem,a*Tem+b,label="$k_{appro}(T)$")
 ax.set_xlabel('Temperature(K)')
 ax.set_ylabel('$k(T)$')
 plt.legend(loc='best')
+
+
+fig3 = plt.figure()
+ax = fig3.add_subplot(111)
+ax.plot(Tem,H(1,Tem),label="$t=1$")
+ax.plot(Tem,H(5,Tem),label="$t=5$")
+ax.plot(Tem,H(10,Tem),label="$t=10$")
+ax.set_xlabel('Tempareture(K)')
+ax.set_ylabel('Hue(${}^\circ$)')
+ax.set_title('Quest')
+plt.legend(loc='best')
+sns.despine()
 
 plt.show()
