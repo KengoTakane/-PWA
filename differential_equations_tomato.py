@@ -17,4 +17,29 @@ def k(T):
 
 
 def f(t, v): # H:v[0], Enz:v[1]
-    return [-k*v[0]*v[1], k*v[0]*v[1]]
+    return [-k(15+273)*v[0]*v[1], k(15+273)*v[0]*v[1]]
+
+v0 = [65, 40]
+
+solver = ode(f)
+solver.set_integrator(name="dop853")
+solver.set_initial_value(v0)
+
+tw = 25
+dt = tw / 1000
+t = 0.0
+ts = []
+Hs = []
+Enzs = []
+
+while solver.t < tw:
+    solver.integrate(solver.t+dt)
+    ts += [solver.t]
+    Hs += [solver.y[0]]
+    Enzs += [solver.y[1]]
+
+plt.figure(0)
+plt.plot(ts, Hs)
+plt.figure(1)
+plt.plot(ts, Enzs)
+plt.show()
