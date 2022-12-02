@@ -17,9 +17,9 @@ def k(T):
     return k_ref*np.exp((E_a/Rg)*(1/T_ref-1/T))
 
 
-init   = [63.5,10.0]
-t_span = [0.0,25.0]
-t_eval = np.linspace(*t_span,3000) # time for sampling
+init   = [61.5,90.0]
+t_span = [0.0,23.0]
+t_eval = np.linspace(*t_span,300) # time for sampling
 
 def fun(t,X):
     H,Enz = X
