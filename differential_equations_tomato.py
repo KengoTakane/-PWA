@@ -20,14 +20,14 @@ def k(T):
 def f(t, v): # H:v[0], Enz:v[1]
     return [-k(15+273)*v[0]*v[1], k(15+273)*v[0]*v[1]]
 
-v0 = [65, 10]
+v0 = [63, 10]
 
 solver = ode(f)
 solver.set_integrator(name="dop853")
 solver.set_initial_value(v0)
 
 tw = 25
-dt = tw / 1000
+dt = tw / 10000
 t = 0.0
 ts = []
 Hs = []
