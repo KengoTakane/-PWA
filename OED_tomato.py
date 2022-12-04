@@ -17,7 +17,7 @@ def k(T):
     return k_ref*np.exp((E_a/Rg)*(1/T_ref-1/T))
 
 
-init   = [21.5,90.0]
+init   = [H_0-H_plusinf,90.0]
 t_span = [0.0,23.0]
 t_eval = np.linspace(*t_span,300) # time for sampling
 
@@ -32,15 +32,16 @@ fig = plt.figure()
 ax1 = fig.add_subplot(211)
 ax2 = fig.add_subplot(212)
 
-ax1.plot(sol.t[:],sol.y[0,:]+40, label="$H(t)$")
+ax1.plot(sol.t[:],sol.y[0,:]+H_plusinf, label="$H(t)$")
 ax1.set_xlabel('time(days)')
 ax1.set_ylabel('Hue(${}^\circ$)')
 ax1.set_title('$H(t)$')
+ax1.legend(loc='upper right')
+
 
 ax2.plot(sol.t[:], sol.y[1,:], label="$Enz(t)$")
 ax2.set_xlabel('time(days)')
 ax2.set_ylabel('Hue(${}^\circ$)')
 ax2.set_title('Enz(t)')
-
-plt.legend(loc='best')
+ax2.legend(loc='lower right')
 plt.show()
