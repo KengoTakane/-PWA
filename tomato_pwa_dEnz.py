@@ -19,7 +19,7 @@ def k_rate(T):
     return k_ref*np.exp((E_a/Rg)*(1/T_ref-1/T))
 
 def f(T,H,Enz):
-    return -k_rate(T)*H*Enz
+    return k_rate(T)*H*Enz
 
 
 n = 3
