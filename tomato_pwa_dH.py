@@ -23,7 +23,7 @@ def f(T,H,Enz):
 
 
 n = 3
-N = 200
+N = 150
 c = 5
 s = 3
 
@@ -66,17 +66,16 @@ inv_phi = np.linalg.inv(phi)
 PHI = inv_phi @ Phi_T
 Theta_ls = PHI @ Yc
 
-# SSR : N dimension vector, m : N×n dimension row vector(1-dim array), V : N×(n+1)×(n+1) dimension matrix, Q : N×n×n dimension matrix, eps : feature vector(N×(2n+1) dimension matrix), R : N×(2n+1)×(2n+1) matrix, w : N dimension vector (1dim-array)
+# SSR : N dimension vector, m : N×n dimension matrix, V : N×(n+1)×(n+1) dimension matrix, Q : N×n×n dimension matrix, eps : feature vector(N×(2n+1) dimension matrix), R : N×(2n+1)×(2n+1) matrix, w : N dimension vector (1dim-array)
 eye = np.stack(([np.eye(Xc.shape[2])]*Xc.shape[0]), axis = 0)
 SSR = Yc.transpose(0, 2, 1) @ (eye - (Phi @ PHI)) @ Yc
 m = np.sum(Xc, axis=2)/c
 V = (SSR/(c-n-1)) * inv_phi
 Q = (Xc-m[:,:,np.newaxis]) @ (Xc-m[:,:,np.newaxis]).transpose(0,2,1)
 theta_ls_H = Theta_ls.transpose(0, 2, 1)
-eps_H = np.empty((Xc.shape[0], 2*Xc.shape[1]+1))
-eps_Enz = np.empty((Xc.shape[0], 2*Xc.shape[1]+1))
+eps = np.empty((Xc.shape[0], 2*Xc.shape[1]+1))
 for i in range(Xc.shape[0]):
-    eps_H[i, :] = np.concatenate((theta_ls_H[i, :, :].flatten(),m[i, :]), axis = 0)
+    eps[i, :] = np.concatenate((theta_ls_H[i, :, :].flatten(),m[i, :]), axis = 0)
 Zero_upper = np.zeros((V.shape[0], V.shape[1], Q.shape[2]))
 Zero_lower = np.zeros((Q.shape[0], Q.shape[1], V.shape[2]))
 Upper = np.concatenate((V, Zero_upper), axis=2)
@@ -102,10 +101,9 @@ class FMeans_pp:
         first_cluster = X[tmp]
         first_cluster = first_cluster[np.newaxis,:]
         Rinv = np.linalg.inv(R)
-        #print('Rinv:', Rinv.shape)
 
         #最初のクラスタ点とそれ以外のデータ点との行列ノルムの2乗を計算し、それぞれをその総和で割る
-        #∥X-first_cluster∥_Rinv^2 = <X-first_cluster, Rinv(x-first_cluster)>
+        # ∥ X - first_cluster ∥_Rinv^2 = <X-first_cluster, Rinv(x-first_cluster)>
         #X-first_cluster : N×(2n+1) matrix, Rinv(x-first_cluster) : N×(2n+1)×1 matrix(array)
         left_vec = X - first_cluster
         right_vec = Rinv @ left_vec[:,:,np.newaxis]
@@ -113,17 +111,9 @@ class FMeans_pp:
         #dist_p = np.diagonal(norm_m, axis1 = 1, axis2 = 2)
         # p : N dimension vector(1-dim array)
         p = ((left_vec[:,np.newaxis,:] @ right_vec) / (left_vec[:,np.newaxis,:] @ right_vec).sum()).reshape(X.shape[0],)
-        #print('p:', p)
-        #print('norm:', left_vec[:,np.newaxis,:] @ right_vec)
-
-        #最初のクラスタ点とそれ以外のデータ点との距離の2乗を計算し、それぞれをその総和で割る
-        # p : N dimension vector(1-dim array)
-        #p = ((X - first_cluster)**2).sum(axis = 1) / ((X - first_cluster)**2).sum()
 
         r =  np.random.choice(np.array(range(X.shape[0])), size = 1, replace = False, p = p)
-
         first_cluster = np.r_[first_cluster ,X[r]]
-        #print('first_cluster:', first_cluster)
 
         #分割するクラスター数が3個以上の場合
         if self.n_clusters >= 3:
@@ -137,8 +127,6 @@ class FMeans_pp:
                 dist_f = np.diagonal(norm_m, axis1 = 1, axis2 =2)
                 #print('dist_f(pre):', dist_f)
                 dist_f.flags.writeable = True
-                #各クラスター点と各データポイントとの距離の2乗を算出
-                #dist_f = ((X[:, :, np.newaxis] - first_cluster.T[np.newaxis, :, :])**2).sum(axis = 1)
                 #最も距離の近いクラスター点はどれか導出
                 f_argmin = dist_f.argmin(axis = 1)
                 #最も距離の近いクラスター点と各データポイントとの行列ノルムの2乗を導出
@@ -153,7 +141,7 @@ class FMeans_pp:
                 rr = np.random.choice(np.array(range(X.shape[0])), size = 1, replace = False, p = pp)
                 #新しいクラスター点を初期値として加える
                 first_cluster = np.r_[first_cluster ,X[rr]]
-        print('first_cluster:', first_cluster)
+        # print('first_cluster:', first_cluster)
 
         #最初のラベルづけを行う
         left = (X[:, :, np.newaxis] - first_cluster.T[np.newaxis, :, :]).transpose(0, 2, 1)
@@ -161,7 +149,7 @@ class FMeans_pp:
         norm = left @ right
         dist = np.diagonal(norm, axis1 = 1, axis2 =2)
         #dist = (((X[:, :, np.newaxis] - first_cluster.T[np.newaxis, :, :]) ** 2).sum(axis = 1))
-        print('dist(first):', dist)
+        
         self.labels_ = dist.argmin(axis = 1)
         print('labels(first):', self.labels_)
         labels_prev = np.zeros(X.shape[0])
@@ -174,22 +162,19 @@ class FMeans_pp:
             for i in range(self.n_clusters):
                 XX = X[self.labels_ == i, :]
                 RR = Rinv[self.labels_ == i, :, :]
-                print('RR:', RR.shape)
+                # print('RR:', RR.shape)
                 RRinv = np.linalg.inv(RR.sum(axis=0))
                 self.cluster_centers_[i, :] = (RRinv @ ((RR @ XX[:,:,np.newaxis]).sum(axis=0))).T
 
-            print('cluster_centers:', self.cluster_centers_)
-            #その時点での各クラスターの重心を計算する
-            #for i in range(self.n_clusters):
-            #   XX = X[self.labels_ == i, :]
-            #  self.cluster_centers_[i, :] = XX.mean(axis = 0)
+            # print('cluster_centers:', self.cluster_centers_)
+            
             #各データポイントと各クラスター中心間の行列ノルムを総当たりで計算する
             # dist : N×s dimension matrix
             Left_v = (X[:,:,np.newaxis] - self.cluster_centers_.T[np.newaxis,:,:]).transpose(0,2,1)
             Right_v = Rinv @ (X[:,:,np.newaxis] - self.cluster_centers_.T[np.newaxis,:,:])
             Norm = Left_v @ Right_v
             dist = np.diagonal(Norm, axis1 = 1, axis2 =2)
-            print('dist:', dist)
+            
             #1つ前のクラスターラベルを覚えておく。1つ前のラベルとラベルが変化しなければプログラムは終了する。
             labels_prev = self.labels_
             #再計算した結果、最も距離の近いクラスターのラベルを割り振る
@@ -210,7 +195,7 @@ print('-----------------------------------f_H(t)の線形回帰-----------------
 print('----------------------------------------------------------------------------------------')
 
 model = FMeans_pp(s)
-model.fit(eps_H, R)
+model.fit(eps, R)
 
 Xr0 = Xc[model.labels_ == 0,:,:]
 wr0 = w_H[model.labels_ == 0]
@@ -286,14 +271,14 @@ Num_SV = clf.n_support_
 for i in range(s):
     print('Number of label %d : %d' % (i, F[i].shape[1]))
 
-print('X_features:', X_features.shape)
-print('X_labels:', X_labels.shape)
+# print('X_features:', X_features.shape)
+# print('X_labels:', X_labels.shape)
 print('coef_ID function(T,H,Enz):\n', clf.coef_)
 print('intercept_ID function(S):\n', clf.intercept_)
 #print('support_index:\n', clf.support_)
-print('Number_SupportVector:\n', Num_SV)
-print('SupportVectors:\n', clf.support_vectors_)
-print('Norm between SupportVector and ID_function:\n', Norm_SV_ID)
-print('Norm in class0:\n', Norm_SV_ID[Num_SV[0]-10:Num_SV[0]-1])
-print('Norm in class1:\n', Norm_SV_ID[Num_SV[0]-1+Num_SV[1]-10:Num_SV[0]-1+Num_SV[1]-1])
-print('Norm in class2:\n', Norm_SV_ID[Num_SV[0]+Num_SV[1]-1+Num_SV[2]-10:Num_SV[0]+Num_SV[1]-1+Num_SV[2]-1])
+# print('Number_SupportVector:\n', Num_SV)
+# print('SupportVectors:\n', clf.support_vectors_)
+# print('Norm between SupportVector and ID_function:\n', Norm_SV_ID)
+# print('Norm in class0:\n', Norm_SV_ID[Num_SV[0]-10:Num_SV[0]-1])
+# print('Norm in class1:\n', Norm_SV_ID[Num_SV[0]-1+Num_SV[1]-10:Num_SV[0]-1+Num_SV[1]-1])
+# print('Norm in class2:\n', Norm_SV_ID[Num_SV[0]+Num_SV[1]-1+Num_SV[2]-10:Num_SV[0]+Num_SV[1]-1+Num_SV[2]-1])
