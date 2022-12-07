@@ -151,7 +151,7 @@ class FMeans_pp:
         #dist = (((X[:, :, np.newaxis] - first_cluster.T[np.newaxis, :, :]) ** 2).sum(axis = 1))
         
         self.labels_ = dist.argmin(axis = 1)
-        print('labels(first):', self.labels_)
+        # print('labels(first):', self.labels_)
         labels_prev = np.zeros(X.shape[0])
         count = 0
         self.cluster_centers_ = np.zeros((self.n_clusters, X.shape[1]))
@@ -179,10 +179,10 @@ class FMeans_pp:
             labels_prev = self.labels_
             #再計算した結果、最も距離の近いクラスターのラベルを割り振る
             self.labels_ = dist.argmin(axis = 1)
-            print('labels:', self.labels_)
+            # print('labels:', self.labels_)
             count += 1
             self.count = count
-            print('count:', self.count)
+            # print('count:', self.count)
 
     def predict(self, X):
         dist = ((X[:, :, np.newaxis] - self.cluster_centers_.T[np.newaxis, :, :]) ** 2).sum(axis = 1)
@@ -258,7 +258,7 @@ for i in range(s):
     theta[i,:] = res_wls.params
 
 print('------------------------------------------------------------------------------------------------------------------')
-print('[y切片, Tの係数, Hの係数, Enzの係数]:\n', theta)
+print('[y切片, T(t)の係数, H(t)の係数, Enz(t)の係数]:\n', theta)
 
 
 X_features = np.concatenate([X0, X1, X2], 1)
