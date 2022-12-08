@@ -28,7 +28,7 @@ def fun(t,X):
 sol = solve_ivp(fun,t_span,init,method='RK45',t_eval=t_eval)
 
 print('sol.y shape: ', sol.y.shape)
-print('H(0): ', init[0])
+print('H(0): ', init[0]+H_plusinf)
 print('Enz(0): ', init[1])
 # print('H(22): ', sol.y[0,:])
 # print('Enz(22): ', sol.y[1,:])
