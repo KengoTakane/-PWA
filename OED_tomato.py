@@ -17,7 +17,7 @@ def k(T):
     return k_ref*np.exp((E_a/Rg)*(1/T_ref-1/T))
 
 
-init   = [H_0-H_plusinf,90.0]
+init   = [H_0-H_plusinf,60.0]
 t_span = [0.0,23.0]
 t_eval = np.linspace(*t_span,300) # time for sampling
 
@@ -26,6 +26,12 @@ def fun(t,X):
     return [-k(15+273)*H*Enz, k(15+273)*H*Enz]
 
 sol = solve_ivp(fun,t_span,init,method='RK45',t_eval=t_eval)
+
+print('sol.y shape: ', sol.y.shape)
+print('H(0): ', init[0])
+print('Enz(0): ', init[1])
+# print('H(22): ', sol.y[0,:])
+# print('Enz(22): ', sol.y[1,:])
 
 sns.set()
 fig = plt.figure()
