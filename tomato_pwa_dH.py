@@ -25,7 +25,7 @@ def f(T,H,Enz):
 n = 3
 N = 150
 c = 5
-s = 3
+s = 5
 
 
 # row vector(1-dim array)
