@@ -23,13 +23,16 @@ init   = [H_0-H_plusinf,60.0]
 t_span = [0.0,22.0]
 t_eval = np.linspace(*t_span,300) # time for sampling
 
-def fun(t,X):
+def fun(t,X,T):
     H,Enz = X
-    return [-k(15+273)*H*Enz, k(15+273)*H*Enz]
+    return [-k(T)*H*Enz, k(T)*H*Enz]
 
-sol = solve_ivp(fun,t_span,init,method='RK45',t_eval=t_eval)
 
-print('sol.y shape: ', sol.y.shape)
+sol_12 = solve_ivp(fun,t_span,init,method='RK45',t_eval=t_eval,args=12+273)
+sol_15 = solve_ivp(fun,t_span,init,method='RK45',t_eval=t_eval,args=15+273)
+sol_18 = solve_ivp(fun,t_span,init,method='RK45',t_eval=t_eval,args=18+273)
+
+print('sol.y shape: ', sol_15.y.shape)
 print('H(0): ', init[0]+H_plusinf)
 print('Enz(0): ', init[1])
 # print('H(22): ', sol.y[0,:])
@@ -41,7 +44,7 @@ ax1 = fig.add_subplot(211)
 ax2 = fig.add_subplot(212)
 
 x = np.linspace(0,22,100)
-ax1.plot(sol.t[:],sol.y[0,:]+H_plusinf, label="$H(t)$ from DeEq")
+ax1.plot(sol_15.t[:],sol_15.y[0,:]+H_plusinf, label="$H(t)$ from DeEq")
 ax1.plot(x,H(x,15+273),label="$H(t)$ from Sol")
 ax1.set_ylim(40, 70)
 ax1.set_xlabel('time(days)')
@@ -50,9 +53,12 @@ ax1.set_title('$H(t)$')
 ax1.legend(loc='upper right')
 
 
+
+"""
 ax2.plot(sol.t[:], sol.y[1,:], label="$Enz(t)$")
 ax2.set_xlabel('time(days)')
 ax2.set_ylabel('Hue(${}^\circ$)')
 ax2.set_title('Enz(t)')
 ax2.legend(loc='lower right')
 plt.show()
+"""
