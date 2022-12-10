@@ -16,6 +16,8 @@ Rg = 0.008314
 def k(T):
     return k_ref*np.exp((E_a/Rg)*(1/T_ref-1/T))
 
+def H(t,T):
+    return H_plusinf + (H_minusinf-H_plusinf)/(1+np.exp((k(T)*t)*(H_minusinf-H_plusinf))*(H_minusinf-H_0)/(H_0-H_plusinf))
 
 init   = [H_0-H_plusinf,60.0]
 t_span = [0.0,22.0]
@@ -38,7 +40,9 @@ fig = plt.figure()
 ax1 = fig.add_subplot(211)
 ax2 = fig.add_subplot(212)
 
-ax1.plot(sol.t[:],sol.y[0,:]+H_plusinf, label="$H(t)$")
+x = np.linspace(0,22,100)
+ax1.plot(sol.t[:],sol.y[0,:]+H_plusinf, label="$H(t)$ from DeEq")
+ax1.plot(x,H(x,15+273),label="$H(t)$ from Sol")
 ax1.set_ylim(40, 70)
 ax1.set_xlabel('time(days)')
 ax1.set_ylabel('Hue(${}^\circ$)')
