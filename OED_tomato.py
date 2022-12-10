@@ -12,6 +12,7 @@ E_a = 170.604
 T_ref = 288.15
 Rg = 0.008314
 
+Enz_0 = 61
 
 def k(T):
     return k_ref*np.exp((E_a/Rg)*(1/T_ref-1/T))
@@ -19,7 +20,7 @@ def k(T):
 def H(t,T):
     return H_plusinf + (H_minusinf-H_plusinf)/(1+np.exp((k(T)*t)*(H_minusinf-H_plusinf))*(H_minusinf-H_0)/(H_0-H_plusinf))
 
-init   = [H_0-H_plusinf,60.0]
+init   = [H_0-H_plusinf, Enz_0]
 t_span = [0.0,22.0]
 t_eval = np.linspace(*t_span,300) # time for sampling
 
@@ -52,6 +53,7 @@ ax1.set_ylabel('Hue(${}^\circ$)')
 ax1.set_title('$H(t), T=15^{\circ}C$')
 ax1.legend(loc='upper right')
 
+"""
 ax2.plot(sol_18.t[:],sol_18.y[0,:]+H_plusinf, label="$H(t)$ from DeEq")
 ax2.plot(x,H(x,18+273),label="$H(t)$ from Sol")
 ax2.set_ylim(40, 70)
@@ -60,12 +62,11 @@ ax2.set_ylabel('Hue(${}^\circ$)')
 ax2.set_title('$H(t),  T=18^{\circ}C$')
 ax2.legend(loc='upper right')
 
-
 """
-ax2.plot(sol.t[:], sol.y[1,:], label="$Enz(t)$")
+ax2.plot(sol_15.t[:], sol_15.y[1,:], label="$Enz(t)$")
 ax2.set_xlabel('time(days)')
 ax2.set_ylabel('Hue(${}^\circ$)')
-ax2.set_title('Enz(t)')
+ax2.set_title('Enz(t),  T=15^{\circ}C')
 ax2.legend(loc='lower right')
-"""
+
 plt.show()
