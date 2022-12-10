@@ -49,9 +49,16 @@ ax1.plot(x,H(x,15+273),label="$H(t)$ from Sol")
 ax1.set_ylim(40, 70)
 ax1.set_xlabel('time(days)')
 ax1.set_ylabel('Hue(${}^\circ$)')
-ax1.set_title('$H(t)$')
+ax1.set_title('$H(t), T=15^{\circ}C$')
 ax1.legend(loc='upper right')
 
+ax2.plot(sol_18.t[:],sol_18.y[0,:]+H_plusinf, label="$H(t)$ from DeEq")
+ax2.plot(x,H(x,18+273),label="$H(t)$ from Sol")
+ax2.set_ylim(40, 70)
+ax2.set_xlabel('time(days)')
+ax2.set_ylabel('Hue(${}^\circ$)')
+ax2.set_title('$H(t),  T=18^{\circ}C$')
+ax2.legend(loc='upper right')
 
 
 """
