@@ -84,7 +84,7 @@ R = np.concatenate((Upper,Lower), axis=1)
 pai = np.power(2*np.pi, 2*n+1)
 det_R = np.linalg.det(R)
 re_w = np.sqrt(pai*det_R)
-w_H = 1/re_w
+w = 1/re_w
 
 
 
@@ -198,7 +198,7 @@ model = FMeans_pp(s)
 model.fit(eps, R)
 
 Xr0 = Xc[model.labels_ == 0,:,:]
-wr0 = w_H[model.labels_ == 0]
+wr0 = w[model.labels_ == 0]
 #print('wr0:', wr0.shape)
 X0 = Xr0[0,:,:]
 w0 = [wr0[0]]*c
@@ -214,7 +214,7 @@ Enz0 = X0[2,:]
 y0 = f(T0, H0, Enz0)
 
 Xr1 = Xc[model.labels_ == 1,:,:]
-wr1 = w_H[model.labels_ == 1]
+wr1 = w[model.labels_ == 1]
 #print('wr1:', wr1.shape)
 X1 = Xr1[0,:,:]
 w1 = [wr1[0]]*c
@@ -230,7 +230,7 @@ Enz1 = X1[2,:]
 y1 = f(T1, H1, Enz1)
 
 Xr2 = Xc[model.labels_ == 2,:,:]
-wr2 = w_H[model.labels_ == 2]
+wr2 = w[model.labels_ == 2]
 #print('wr2:', wr2.shape)
 X2 = Xr2[0,:,:]
 w2 = [wr2[0]]*c
@@ -245,9 +245,42 @@ H2 = X2[1,:]
 Enz2 = X2[2,:]
 y2 = f(T2, H2, Enz2)
 
-F = [X0, X1, X2]
-L = [y0, y1, y2]
-W = [w0, w1, w2]
+Xr3 = Xc[model.labels_ == 3,:,:]
+wr3 = w[model.labels_ == 3]
+#print('wr3:', wr3.shape)
+X3 = Xr3[0,:,:]
+w3 = [wr3[0]]*c
+for i in range(Xr3.shape[0]-1):
+    i += 1
+    X3 = np.c_[X3, Xr3[i,:,:]]
+    w3 = np.r_[w3, [wr3[i]]*c]
+#print('X3:', X3.shape)
+#print('w3:', w3.shape)
+T3 = X3[0,:]
+H3 = X3[1,:]
+Enz3 = X3[2,:]
+y3 = f(T3, H3, Enz3)
+
+Xr4 = Xc[model.labels_ == 4,:,:]
+wr4 = w[model.labels_ == 4]
+#print('wr4:', wr4.shape)
+X4 = Xr4[0,:,:]
+w4 = [wr4[0]]*c
+for i in range(Xr4.shape[0]-1):
+    i += 1
+    X4 = np.c_[X4, Xr4[i,:,:]]
+    w4 = np.r_[w4, [wr4[i]]*c]
+#print('X4:', X4.shape)
+#print('w4:', w4.shape)
+T4 = X4[0,:]
+H4 = X4[1,:]
+Enz4 = X4[2,:]
+y4 = f(T4, H4, Enz4)
+
+
+F = [X0, X1, X2, X3, X4]
+L = [y0, y1, y2, y3, y4]
+W = [w0, w1, w2, w3, w4]
 
 theta = np.empty((s, n+1))
 
@@ -258,8 +291,12 @@ for i in range(s):
     theta[i,:] = res_wls.params
 
 print('------------------------------------------------------------------------------------------------------------------')
-print('[y切片, T(t)の係数, H(t)の係数, Enz(t)の係数]:\n', theta)
+print('[D:y切片, C:T(t)の係数, A:H(t)の係数, B:Enz(t)の係数]:\n', theta)
 
+
+print('----------------------------------------------------------------------------------------')
+print('-----------------------------------f_H(t)の区分領域--------------------------------------')
+print('----------------------------------------------------------------------------------------')
 
 X_features = np.concatenate([X0, X1, X2], 1)
 X_labels = np.concatenate((np.array([0]*X0.shape[1]), np.array([1]*X1.shape[1]), np.array([2]*X2.shape[1])), axis = 0)
@@ -273,7 +310,7 @@ for i in range(s):
 
 # print('X_features:', X_features.shape)
 # print('X_labels:', X_labels.shape)
-print('coef_ID function(T,H,Enz):\n', clf.coef_)
+print('coef_ID function(R:T(t)の係数, Q:H(t)の係数, T:Enz(t)の係数):\n', clf.coef_)
 print('intercept_ID function(S):\n', clf.intercept_)
 # print('support_index:\n', clf.support_)
 # print('Number_SupportVector:\n', Num_SV)
