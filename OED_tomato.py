@@ -18,7 +18,7 @@ def k(T):
 
 
 init   = [H_0-H_plusinf,60.0]
-t_span = [0.0,23.0]
+t_span = [0.0,22.0]
 t_eval = np.linspace(*t_span,300) # time for sampling
 
 def fun(t,X):
@@ -39,6 +39,7 @@ ax1 = fig.add_subplot(211)
 ax2 = fig.add_subplot(212)
 
 ax1.plot(sol.t[:],sol.y[0,:]+H_plusinf, label="$H(t)$")
+ax1.set_ylim(40, 70)
 ax1.set_xlabel('time(days)')
 ax1.set_ylabel('Hue(${}^\circ$)')
 ax1.set_title('$H(t)$')
