@@ -28,9 +28,9 @@ def fun(t,X,T):
     return [-k(T)*H*Enz, k(T)*H*Enz]
 
 
-sol_12 = solve_ivp(fun,t_span,init,method='RK45',t_eval=t_eval,args=12+273)
-sol_15 = solve_ivp(fun,t_span,init,method='RK45',t_eval=t_eval,args=15+273)
-sol_18 = solve_ivp(fun,t_span,init,method='RK45',t_eval=t_eval,args=18+273)
+sol_12 = solve_ivp(fun,t_span,init,method='RK45',t_eval=t_eval,args=[12+273])
+sol_15 = solve_ivp(fun,t_span,init,method='RK45',t_eval=t_eval,args=[15+273])
+sol_18 = solve_ivp(fun,t_span,init,method='RK45',t_eval=t_eval,args=[18+273])
 
 print('sol.y shape: ', sol_15.y.shape)
 print('H(0): ', init[0]+H_plusinf)
@@ -67,5 +67,5 @@ ax2.set_xlabel('time(days)')
 ax2.set_ylabel('Hue(${}^\circ$)')
 ax2.set_title('Enz(t)')
 ax2.legend(loc='lower right')
-plt.show()
 """
+plt.show()
