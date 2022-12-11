@@ -23,7 +23,7 @@ def f(T,H,Enz):
 
 
 n = 3
-N = 250
+N = 150
 c = 5
 s = 5
 
@@ -100,7 +100,7 @@ class FMeans_pp:
         tmp = np.random.choice(np.array(range(X.shape[0])))
         first_cluster = X[tmp]
         first_cluster = first_cluster[np.newaxis,:]
-        Rinv = np.linalg.pinv(R)
+        Rinv = np.linalg.inv(R)
 
         #最初のクラスタ点とそれ以外のデータ点との行列ノルムの2乗を計算し、それぞれをその総和で割る
         # ∥ X - first_cluster ∥_Rinv^2 = <X-first_cluster, Rinv(x-first_cluster)>
