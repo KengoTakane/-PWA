@@ -12,7 +12,7 @@ T_ref = 288.15
 Rg = 0.008314
 
 T_min, T_max = 278, 298
-H_min, H_max = 42, H_0-H_plusinf
+H_min, H_max = 42, H_0
 Enz_min, Enz_max = 61, 80
 
 def k_rate(T):
