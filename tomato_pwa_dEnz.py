@@ -349,6 +349,43 @@ print('intercept_ID function(S):\n', clf.intercept_)
 # print('Norm in class2:\n', Norm_SV_ID[Num_SV[0]+Num_SV[1]-1+Num_SV[2]-10:Num_SV[0]+Num_SV[1]-1+Num_SV[2]-1])
 
 
+############################################################
+#################### g,hを求める #########################
+############################################################
+
+
+def pwa(H, Enz, Ta, A, B, C, D):
+    return A*H + B*Enz + C*Ta + D
+
+def get_gmin(s,A,B,C,D):
+    gmin = np.empty(s)
+    for i in range(s):
+        choice = [pwa(H_min,Enz_min,T_min,A[i],B[i],C[i],D[i]), pwa(H_min,Enz_min,T_max,A[i],B[i],C[i],D[i]),
+        pwa(H_min,Enz_max,T_min,A[i],B[i],C[i],D[i]), pwa(H_min,Enz_max,T_max,A[i],B[i],C[i],D[i]),
+        pwa(H_max,Enz_min,T_min,A[i],B[i],C[i],D[i]), pwa(H_max,Enz_min,T_max,A[i],B[i],C[i],D[i]),
+        pwa(H_max,Enz_max,T_min,A[i],B[i],C[i],D[i]), pwa(H_max,Enz_max,T_max,A[i],B[i],C[i],D[i])]
+        gmin[i] = min(choice)
+    return gmin
+
+
+def get_gmax(s,A,B,C,D):
+    gmax = np.empty(s)
+    for i in range(s):
+        choice = [pwa(H_min,Enz_min,T_min,A[i],B[i],C[i],D[i]), pwa(H_min,Enz_min,T_max,A[i],B[i],C[i],D[i]),
+        pwa(H_min,Enz_max,T_min,A[i],B[i],C[i],D[i]), pwa(H_min,Enz_max,T_max,A[i],B[i],C[i],D[i]),
+        pwa(H_max,Enz_min,T_min,A[i],B[i],C[i],D[i]), pwa(H_max,Enz_min,T_max,A[i],B[i],C[i],D[i]),
+        pwa(H_max,Enz_max,T_min,A[i],B[i],C[i],D[i]), pwa(H_max,Enz_max,T_max,A[i],B[i],C[i],D[i])]
+        gmax[i] = max(choice)
+        # print(choice)
+    return gmax
+
+
+print("gmin:\n", get_gmin(s,A_c,B_c,C_c,D_c))
+print("gmax:\n", get_gmax(s,A_c,B_c,C_c,D_c))
+print("hmin:\n", get_gmin(num_piece,Q_p,T_p,R_p,S_p))
+print("hmax:\n", get_gmax(num_piece,Q_p,T_p,R_p,S_p))
+
+
 
 ############################################################
 ####################区分アフィン関数#########################
