@@ -304,10 +304,10 @@ for i in range(s):
     B_c[i] = theta[i,3]
 
 print('------------------------------------------------------------------------------------------------------------------')
-print('[D:y切片, C:T(t)の係数, A:H(t)の係数, B:Enz(t)の係数]:\n', theta)
-print('A:H(t)の係数', A_c)
-print('B:Enz(t)の係数', B_c)
-print('C:T(t)の係数', C_c)
+# print('[D:y切片, C:T(t)の係数, A:H(t)の係数, B:Enz(t)の係数]:\n', theta)
+print('A:H(t)の係数:\n', A_c)
+print('B:Enz(t)の係数:\n', B_c)
+print('C:T(t)の係数:\n', C_c)
 print('D:y切片:\n', D_c)
 
 
@@ -335,7 +335,7 @@ for i in range(s):
 
 # print('X_features:', X_features.shape)
 # print('X_labels:', X_labels.shape)
-print('coef_ID function(R:T(t)の係数, Q:H(t)の係数, T:Enz(t)の係数):\n', clf.coef_)
+# print('coef_ID function(R:T(t)の係数, Q:H(t)の係数, T:Enz(t)の係数):\n', clf.coef_)
 print('Q:H(t)の係数 :\n', Q_p)
 print('T:Enz(t)の係数) :\n', T_p)
 print('R:T(t)の係数 :\n', R_p)
