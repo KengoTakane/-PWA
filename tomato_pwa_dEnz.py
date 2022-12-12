@@ -23,7 +23,7 @@ def f(T,H,Enz):
 
 
 n = 3
-N = 500
+N = 600
 c = 5
 s = 5
 num_piece = int(s*(s-1)/2)
@@ -197,7 +197,7 @@ class FMeans_pp:
 
 
 print('----------------------------------------------------------------------------------------')
-print('-----------------------------------f_H(t)の線形回帰--------------------------------------')
+print('-----------------------------------f_Enz(t)の線形回帰--------------------------------------')
 print('----------------------------------------------------------------------------------------')
 
 model = FMeans_pp(s)
@@ -312,7 +312,7 @@ print('D:y切片:\n', D_c)
 
 
 print('----------------------------------------------------------------------------------------')
-print('-----------------------------------f_H(t)の区分領域--------------------------------------')
+print('-----------------------------------f_Enz(t)の区分領域--------------------------------------')
 print('----------------------------------------------------------------------------------------')
 
 X_features = np.concatenate([X0, X1, X2, X3, X4], 1)
@@ -322,13 +322,13 @@ clf.fit(X_features.T, X_labels)
 Norm_SV_ID = clf.decision_function(clf.support_vectors_)
 Num_SV = clf.n_support_
 
-Q_p, T_p, R_p, S_c = np.empty(num_piece), np.empty(num_piece), np.empty(num_piece), np.empty(num_piece)
+Q_p, T_p, R_p, S_p = np.empty(num_piece), np.empty(num_piece), np.empty(num_piece), np.empty(num_piece)
 
 for i in range(num_piece):
     R_p[i] = clf.coef_[i,0]
     Q_p[i] = clf.coef_[i,1]
     T_p[i] = clf.coef_[i,2]
-
+S_p = clf.intercept_
 
 for i in range(s):
     print('Number of label %d : %d' % (i, F[i].shape[1]))
@@ -347,3 +347,80 @@ print('intercept_ID function(S):\n', clf.intercept_)
 # print('Norm in class0:\n', Norm_SV_ID[Num_SV[0]-10:Num_SV[0]-1])
 # print('Norm in class1:\n', Norm_SV_ID[Num_SV[0]-1+Num_SV[1]-10:Num_SV[0]-1+Num_SV[1]-1])
 # print('Norm in class2:\n', Norm_SV_ID[Num_SV[0]+Num_SV[1]-1+Num_SV[2]-10:Num_SV[0]+Num_SV[1]-1+Num_SV[2]-1])
+
+
+
+############################################################
+####################区分アフィン関数#########################
+############################################################
+
+def fun0(Ta,H,Enz,A,B,C,D):
+    return A[0]*H + B[0]*Enz + C[0]*Ta + D[0]
+def fun1(Ta,H,Enz,A,B,C,D):
+    return A[1]*H + B[1]*Enz + C[1]*Ta + D[1]
+def fun2(Ta,H,Enz,A,B,C,D):
+    return A[2]*H + B[2]*Enz + C[2]*Ta + D[2]
+def fun3(Ta,H,Enz,A,B,C,D):
+    return A[3]*H + B[3]*Enz + C[3]*Ta + D[3]
+def fun4(Ta,H,Enz,A,B,C,D):
+    return A[4]*H + B[4]*Enz + C[4]*Ta + D[4]
+
+def state_partion(Ta,H,Enz,Q,T,R,S):
+    if Q[0]*H+T[0]*Enz+R[0]*Ta+S[0] >=0 and Q[1]*H+T[1]*Enz+R[1]*Ta+S[1] >=0 and Q[2]*H+T[2]*Enz+R[2]*Ta+S[2] >=0 and Q[3]*H+T[3]*Enz+R[3]*Ta+S[3] >=0:
+        return 0
+    elif Q[0]*H+T[0]*Enz+R[0]*Ta+S[0] <=0 and Q[4]*H+T[4]*Enz+R[4]*Ta+S[4] >=0 and Q[5]*H+T[5]*Enz+R[5]*Ta+S[5] >=0 and Q[6]*H+T[6]*Enz+R[6]*Ta+S[6] >=0:
+        return 1
+    elif Q[1]*H+T[1]*Enz+R[1]*Ta+S[1] <=0 and Q[4]*H+T[4]*Enz+R[4]*Ta+S[4] <=0 and Q[7]*H+T[7]*Enz+R[7]*Ta+S[7] >=0 and Q[8]*H+T[8]*Enz+R[8]*Ta+S[8] >=0:
+        return 2
+    elif Q[2]*H+T[2]*Enz+R[2]*Ta+S[2] <=0 and Q[5]*H+T[5]*Enz+R[5]*Ta+S[5] <=0 and Q[7]*H+T[7]*Enz+R[7]*Ta+S[7] <=0 and Q[9]*H+T[9]*Enz+R[9]*Ta+S[9] >=0:
+        return 3
+    elif Q[3]*H+T[3]*Enz+R[3]*Ta+S[3] <=0 and Q[6]*H+T[6]*Enz+R[6]*Ta+S[6] <=0 and Q[8]*H+T[8]*Enz+R[8]*Ta+S[8] <=0 and Q[9]*H+T[9]*Enz+R[9]*Ta+S[9] <=0:
+        return 4
+    else:
+        return 5
+
+############################################################
+######################誤差を計算して出力######################
+############################################################
+
+def error(Ta,H,Enz,A,B,C,D,Q,T,R,S):
+    if state_partion(Ta,H,Enz,Q,T,R,S) == 0:
+        e = (f(Ta,H,Enz)-fun0(Ta,H,Enz,A,B,C,D))**2
+        er = np.sqrt(e)
+        print(er)
+    elif state_partion(Ta,H,Enz,Q,T,R,S) == 1:
+        e = (f(Ta,H,Enz)-fun1(Ta,H,Enz,A,B,C,D))**2
+        er = np.sqrt(e)
+        print(er)
+    elif state_partion(Ta,H,Enz,Q,T,R,S) == 2:
+        e = (f(Ta,H,Enz)-fun2(Ta,H,Enz,A,B,C,D))**2
+        er = np.sqrt(e)
+        print(er)
+    elif state_partion(Ta,H,Enz,Q,T,R,S) == 3:
+        e = (f(Ta,H,Enz)-fun3(Ta,H,Enz,A,B,C,D))**2
+        er = np.sqrt(e)
+        print(er)
+    elif state_partion(Ta,H,Enz,Q,T,R,S) == 4:
+        e = (f(Ta,H,Enz)-fun4(Ta,H,Enz,A,B,C,D))**2
+        er = np.sqrt(e)
+        print(er)
+    else:
+        print("error")
+
+
+N_check = 10
+Ta_check = np.random.uniform(T_min,T_max,(N_check,))
+H_check = np.random.uniform(H_min,H_max,(N_check,))
+Enz_check = np.random.uniform(Enz_min,Enz_max,(N_check,))
+
+print("----------------------------------------------------------------------------------------")
+print("----------------------------------------------------------------------------------------")
+print("----------------------------------------------------------------------------------------")
+print("error : non-linear - linear")
+print("----------------------------------------------------------------------------------------")
+print("----------------------------------------------------------------------------------------")
+print("----------------------------------------------------------------------------------------")
+for i in range(H_check.shape[0]):
+    for j in range(Enz_check.shape[0]):
+        for k in range(Ta_check.shape[0]):
+            error(Ta_check[k],H_check[i],Enz_check[j],A_c,B_c,C_c,D_c,Q_p,T_p,R_p,S_p)
