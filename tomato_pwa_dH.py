@@ -298,8 +298,8 @@ print('-------------------------------------------------------------------------
 print('-----------------------------------f_H(t)の区分領域--------------------------------------')
 print('----------------------------------------------------------------------------------------')
 
-X_features = np.concatenate([X0, X1, X2], 1)
-X_labels = np.concatenate((np.array([0]*X0.shape[1]), np.array([1]*X1.shape[1]), np.array([2]*X2.shape[1])), axis = 0)
+X_features = np.concatenate([X0, X1, X2, X3, X4], 1)
+X_labels = np.concatenate((np.array([0]*X0.shape[1]), np.array([1]*X1.shape[1]), np.array([2]*X2.shape[1]), np.array([3]*X3.shape[1]),np.array([4]*X4.shape[1])), axis = 0)
 clf = SVC(kernel='linear', decision_function_shape='ovo')
 clf.fit(X_features.T, X_labels)
 Norm_SV_ID = clf.decision_function(clf.support_vectors_)
