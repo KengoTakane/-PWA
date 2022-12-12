@@ -111,23 +111,23 @@ def fun_value(q,T,Rh):
     if state_partion(q,T,Rh) == 0:
         e = (fun(q,T,Rh)-fun0(q,T,Rh))**2
         er = np.sqrt(e)
-        print(fun0(q,T,Rh))
+        print('area 0, fun0()=',fun0(q,T,Rh))
     elif state_partion(q,T,Rh) == 1:
         e = (fun(q,T,Rh)-fun1(q,T,Rh))**2
         er = np.sqrt(e)
-        print(fun1(q,T,Rh))
+        print('area 1, fun1()=',fun1(q,T,Rh))
     elif state_partion(q,T,Rh) == 2:
         e = (fun(q,T,Rh)-fun2(q,T,Rh))**2
         er = np.sqrt(e)
-        print(fun2(q,T,Rh))
+        print('area 2, fun2()=',fun2(q,T,Rh))
     elif state_partion(q,T,Rh) == 3:
         e = (fun(q,T,Rh)-fun3(q,T,Rh))**2
         er = np.sqrt(e)
-        print(fun3(q,T,Rh))
+        print('area 3, fun3()=',fun3(q,T,Rh))
     elif state_partion(q,T,Rh) == 4:
         e = (fun(q,T,Rh)-fun4(q,T,Rh))**2
         er = np.sqrt(e)
-        print(fun4(q,T,Rh))
+        print('area 4, fun4()=',fun4(q,T,Rh))
     else:
         print("error")
 

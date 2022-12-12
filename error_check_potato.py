@@ -10,7 +10,7 @@ b = -1.59
 E = 0.045
 Rg = 0.008314
 n = 3
-N = 10
+N = 5
 c = 5
 s = 5
 T = np.random.uniform(278,298,(N,))
@@ -76,23 +76,23 @@ def fun_value(q,T,Rh):
     if state_partion(q,T,Rh) == 0:
         e = (fun(q,T,Rh)-fun0(q,T,Rh))**2
         er = np.sqrt(e)
-        print(fun(q,T,Rh))
+        print('area 0, fun0()=',fun(q,T,Rh))
     elif state_partion(q,T,Rh) == 1:
         e = (fun(q,T,Rh)-fun1(q,T,Rh))**2
         er = np.sqrt(e)
-        print(fun(q,T,Rh))
+        print('area 1, fun1()=',fun(q,T,Rh))
     elif state_partion(q,T,Rh) == 2:
         e = (fun(q,T,Rh)-fun2(q,T,Rh))**2
         er = np.sqrt(e)
-        print(fun(q,T,Rh))
+        print('area 2, fun2()=',fun(q,T,Rh))
     elif state_partion(q,T,Rh) == 3:
         e = (fun(q,T,Rh)-fun3(q,T,Rh))**2
         er = np.sqrt(e)
-        print(fun(q,T,Rh))
+        print('area 3, fun3()=',fun(q,T,Rh))
     elif state_partion(q,T,Rh) == 4:
         e = (fun(q,T,Rh)-fun4(q,T,Rh))**2
         er = np.sqrt(e)
-        print(fun(q,T,Rh))
+        print('area 4, fun4()=',fun(q,T,Rh))
     else:
         print("error")
 
