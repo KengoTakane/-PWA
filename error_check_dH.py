@@ -64,15 +64,15 @@ def fun4(H,Enz,Ta):
     return A[4]*H + B[4]*Enz + C[4]*Ta + D[4]
 
 def state_partion(H,Enz,Ta):
-    if Q[0]*H+T[0]*Enz+R[0]*Ta >=0 and Q[1]*H+T[1]*Enz+R[1]*Ta >=0 and Q[2]*H+T[2]*Enz+R[2]*Ta >=0 and Q[3]*H+T[3]*Enz+R[3]*Ta >=0:
+    if Q[0]*H+T[0]*Enz+R[0]*Ta+S[0] >=0 and Q[1]*H+T[1]*Enz+R[1]*Ta+S[1] >=0 and Q[2]*H+T[2]*Enz+R[2]*Ta+S[2] >=0 and Q[3]*H+T[3]*Enz+R[3]*Ta+S[3] >=0:
         return 0
-    elif Q[0]*H+T[0]*Enz+R[0]*Ta <=0 and Q[4]*H+T[4]*Enz+R[4]*Ta >=0 and Q[5]*H+T[5]*Enz+R[5]*Ta >=0 and Q[6]*H+T[6]*Enz+R[6]*Ta >=0:
+    elif Q[0]*H+T[0]*Enz+R[0]*Ta+S[0] <=0 and Q[4]*H+T[4]*Enz+R[4]*Ta+S[4] >=0 and Q[5]*H+T[5]*Enz+R[5]*Ta+S[5] >=0 and Q[6]*H+T[6]*Enz+R[6]*Ta+S[6] >=0:
         return 1
-    elif Q[1]*H+T[1]*Enz+R[1]*Ta <=0 and Q[4]*H+T[4]*Enz+R[4]*Ta <=0 and Q[7]*H+T[7]*Enz+R[7]*Ta >=0 and Q[8]*H+T[8]*Enz+R[8]*Ta >=0:
+    elif Q[1]*H+T[1]*Enz+R[1]*Ta+S[1] <=0 and Q[4]*H+T[4]*Enz+R[4]*Ta+S[4] <=0 and Q[7]*H+T[7]*Enz+R[7]*Ta+S[7] >=0 and Q[8]*H+T[8]*Enz+R[8]*Ta+S[8] >=0:
         return 2
-    elif Q[2]*H+T[2]*Enz+R[2]*Ta <=0 and Q[5]*H+T[5]*Enz+R[5]*Ta <=0 and Q[7]*H+T[7]*Enz+R[7]*Ta <=0 and Q[9]*H+T[9]*Enz+R[9]*Ta >=0:
+    elif Q[2]*H+T[2]*Enz+R[2]*Ta+S[2] <=0 and Q[5]*H+T[5]*Enz+R[5]*Ta+S[5] <=0 and Q[7]*H+T[7]*Enz+R[7]*Ta+S[7] <=0 and Q[9]*H+T[9]*Enz+R[9]*Ta+S[9] >=0:
         return 3
-    elif Q[3]*H+T[3]*Enz+R[3]*Ta <=0 and Q[6]*H+T[6]*Enz+R[6]*Ta <=0 and Q[8]*H+T[8]*Enz+R[8]*Ta <=0 and Q[9]*H+T[9]*Enz+R[9]*Ta <=0:
+    elif Q[3]*H+T[3]*Enz+R[3]*Ta+S[3] <=0 and Q[6]*H+T[6]*Enz+R[6]*Ta+S[6] <=0 and Q[8]*H+T[8]*Enz+R[8]*Ta+S[8] <=0 and Q[9]*H+T[9]*Enz+R[9]*Ta+S[9] <=0:
         return 4
     else:
         return 5
