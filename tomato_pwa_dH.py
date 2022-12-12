@@ -23,7 +23,7 @@ def f(T,H,Enz):
 
 
 n = 3
-N = 500
+N = 200
 c = 5
 s = 5
 num_piece = int(s*(s-1)/2)
