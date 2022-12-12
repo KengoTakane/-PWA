@@ -23,15 +23,16 @@ def f(T,H,Enz):
 
 
 n = 3
-N = 200
+N = 500
 c = 5
 s = 5
+num_piece = int(s*(s-1)/2)
 
 
 # row vector(1-dim array)
-T = np.random.randint(T_min,T_max,(N,))
-H = np.random.randint(H_min,H_max,(N,))
-Enz = np.random.randint(Enz_min,Enz_max,(N,))
+T = np.random.uniform(T_min,T_max,(N,))
+H = np.random.uniform(H_min,H_max,(N,))
+Enz = np.random.uniform(Enz_min,Enz_max,(N,))
 
 # X : n×N dimension matrix, y : N dimension row vector(1-dim array)
 X = np.array([T,H,Enz])
@@ -100,7 +101,12 @@ class FMeans_pp:
         tmp = np.random.choice(np.array(range(X.shape[0])))
         first_cluster = X[tmp]
         first_cluster = first_cluster[np.newaxis,:]
+        determinant = []
+        for i in range(N):
+            determinant.append(int(np.linalg.det(R[i,:,:])))
+        # print(determinant)
         Rinv = np.linalg.inv(R)
+        
 
         #最初のクラスタ点とそれ以外のデータ点との行列ノルムの2乗を計算し、それぞれをその総和で割る
         # ∥ X - first_cluster ∥_Rinv^2 = <X-first_cluster, Rinv(x-first_cluster)>
@@ -283,6 +289,7 @@ L = [y0, y1, y2, y3, y4]
 W = [w0, w1, w2, w3, w4]
 
 theta = np.empty((s, n+1))
+A_c, B_c, C_c, D_c = np.empty(s), np.empty(s), np.empty(s), np.empty(s)
 
 for i in range(s):
     Fe = sm.add_constant(F[i].T)
@@ -290,8 +297,18 @@ for i in range(s):
     res_wls = mod_wls.fit()
     theta[i,:] = res_wls.params
 
+for i in range(s):
+    D_c[i] = theta[i,0]
+    C_c[i] = theta[i,1]
+    A_c[i] = theta[i,2]
+    B_c[i] = theta[i,3]
+
 print('------------------------------------------------------------------------------------------------------------------')
 print('[D:y切片, C:T(t)の係数, A:H(t)の係数, B:Enz(t)の係数]:\n', theta)
+print('A:H(t)の係数', A_c)
+print('B:Enz(t)の係数', B_c)
+print('C:T(t)の係数', C_c)
+print('D:y切片:\n', D_c)
 
 
 print('----------------------------------------------------------------------------------------')
@@ -305,12 +322,23 @@ clf.fit(X_features.T, X_labels)
 Norm_SV_ID = clf.decision_function(clf.support_vectors_)
 Num_SV = clf.n_support_
 
+Q_p, T_p, R_p, S_c = np.empty(num_piece), np.empty(num_piece), np.empty(num_piece), np.empty(num_piece)
+
+for i in range(num_piece):
+    R_p[i] = clf.coef_[i,0]
+    Q_p[i] = clf.coef_[i,1]
+    T_p[i] = clf.coef_[i,2]
+
+
 for i in range(s):
     print('Number of label %d : %d' % (i, F[i].shape[1]))
 
 # print('X_features:', X_features.shape)
 # print('X_labels:', X_labels.shape)
 print('coef_ID function(R:T(t)の係数, Q:H(t)の係数, T:Enz(t)の係数):\n', clf.coef_)
+print('Q:H(t)の係数 :\n', Q_p)
+print('T:Enz(t)の係数) :\n', T_p)
+print('R:T(t)の係数 :\n', R_p)
 print('intercept_ID function(S):\n', clf.intercept_)
 # print('support_index:\n', clf.support_)
 # print('Number_SupportVector:\n', Num_SV)
