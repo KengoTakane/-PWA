@@ -18,7 +18,7 @@ H_min, H_max = 42, H_0
 Enz_min, Enz_max = 61, 80
 
 n = 3
-N = 100
+N = 10
 c = 5
 s = 5
 num_piece = int(s*(s-1)/2)
