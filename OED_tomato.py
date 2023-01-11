@@ -17,14 +17,14 @@ Enz_0 = 61
 def k(T):
     return k_ref*np.exp((E_a/Rg)*(1/T_ref-1/T))
 
-def H(t,T):
+def H(t,T): # 解
     return H_plusinf + (H_minusinf-H_plusinf)/(1+np.exp((k(T)*t)*(H_minusinf-H_plusinf))*(H_minusinf-H_0)/(H_0-H_plusinf))
 
 init   = [H_0-H_plusinf, Enz_0]
 t_span = [0.0,22.0]
 t_eval = np.linspace(*t_span,300) # time for sampling
 
-def fun(t,X,T):
+def fun(t,X,T): # 微分方程式
     H,Enz = X
     return [-k(T)*H*Enz, k(T)*H*Enz]
 
