@@ -43,7 +43,7 @@ sns.set()
 fig1 = plt.figure()
 fig2 = plt.figure()
 ax1 = fig1.add_subplot(111)
-ax2 = fig2.add_subplot(112)
+ax2 = fig2.add_subplot(111)
 
 x = np.linspace(0,22,100)
 ax1.plot(sol_15.t[:],sol_15.y[0,:]+H_plusinf, label="$H(t)$ from DeEq")
