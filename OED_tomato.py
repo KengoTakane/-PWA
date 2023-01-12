@@ -40,9 +40,10 @@ print('Enz(0): ', init[1])
 # print('Enz(22): ', sol.y[1,:])
 
 sns.set()
-fig = plt.figure()
-ax1 = fig.add_subplot(211)
-ax2 = fig.add_subplot(212)
+fig1 = plt.figure()
+fig2 = plt.figure()
+ax1 = fig1.add_subplot(111)
+ax2 = fig2.add_subplot(112)
 
 x = np.linspace(0,22,100)
 ax1.plot(sol_15.t[:],sol_15.y[0,:]+H_plusinf, label="$H(t)$ from DeEq")
