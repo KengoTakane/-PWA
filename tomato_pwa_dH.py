@@ -447,7 +447,7 @@ def error(Ta,H,Enz,A,B,C,D,Q,T,R,S):
         print("error")
 
 
-N_check = 5
+N_check = 10
 Ta_check = np.random.uniform(T_min,T_max,(N_check,))
 H_check = np.random.uniform(H_min,H_max,(N_check,))
 Enz_check = np.random.uniform(Enz_min,Enz_max,(N_check,))
