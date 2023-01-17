@@ -262,7 +262,7 @@ Rh1 = X1[1,:]
 q1 = X1[2,:]
 y1 = f(T1, Rh1, q1)
 
-"""
+
 Xr2 = Xc[model.labels_ == 2,:,:]
 wr2 = w[model.labels_ == 2]
 #print('wr2:', wr2.shape)
@@ -311,16 +311,13 @@ Rh4 = X4[1,:]
 q4 = X4[2,:]
 y4 = f(T4, Rh4, q4)
 
-"""
 
-"""
+
+
 F = [X0, X1, X2, X3, X4]
 L = [y0, y1, y2, y3, y4]
 W = [w0, w1, w2, w3, w4]
-"""
-F = [X0, X1]
-L = [y0, y1]
-W = [w0, w1]
+
 
 theta = np.empty((s, n+1))
 
