@@ -67,7 +67,7 @@ ax2.legend(loc='upper right')
 ax2.plot(sol_15.t[:], sol_15.y[1,:], label="$Enz(t)$")
 ax2.set_xlabel('time(days)')
 ax2.set_ylabel('Hue(${}^\circ$)')
-ax2.set_title('Enz(t),  T=15^{\circ}C')
+ax2.set_title('$Enz(t),  T=15^{\circ}C$')
 ax2.legend(loc='lower right')
 
 plt.show()
